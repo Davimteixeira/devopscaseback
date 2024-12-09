@@ -30,7 +30,7 @@ Primeiro, clone o repositório do **frontend** e do **backend** em seu diretóri
 
 ```bash
 # Clone o repositório do backend
-git clone https://github.com/seuusuario/devopscaseback.git
+git clone https://github.com/Davimteixeira/devopscaseback.git
 
 # Clone o repositório do frontend
 git clone https://github.com/Davimteixeira/devopscasefront.git

@@ -1,61 +1,103 @@
-# Case de Avaliação para Estágio em DevOps
+# DevOpsCase
 
-Bem-vindo(a) ao case de avaliação de conhecimentos na área de DevOps. O objetivo deste exercício é avaliar suas habilidades em Docker, automação de deployment e integração de serviços, utilizando um banco de dados e compondo uma aplicação full stack (backend e frontend).
+## Pré-requisitos
 
-## Descrição do Desafio
+Antes de começar, certifique-se de que você tem as seguintes ferramentas instaladas no seu ambiente local:
 
-Você deverá:
+- [Docker](https://www.docker.com/get-started) (Versão 20.10 ou superior)
+- [Docker Compose](https://docs.docker.com/compose/install/) (Versão 1.27 ou superior)
+- [Rails 7](https://rubyonrails.org/) (Para desenvolvimento do backend, se necessário para outras operações além do Docker)
 
-1. **Integrar a aplicação backend em Ruby** fornecida neste repositório com a aplicação frontend existente no outro repositório.
-2. **Instanciar um banco de dados** utilizando Docker Compose.
-3. **Criar um arquivo Docker Compose** que orquestre os containers para o backend, frontend e banco de dados.
-4. **Garantir** que toda a aplicação seja acessível e funcional após a integração.
+## Como funciona a integração?
 
-## Instruções
+Este projeto é composto por três containers principais:
 
-1. **Integração Backend-Frontend**:
-   - Integre a aplicação backend (este repositório) com a aplicação frontend disponível no outro repositório fornecido.
-   - Certifique-se de que o frontend consuma as APIs fornecidas pelo backend corretamente.
+1. **Backend (Rails API)**: Um servidor Rails que serve como API para o frontend. Ele interage com o banco de dados PostgreSQL e fornece dados através de endpoints.
 
-2. **Configuração do Banco de Dados**:
-   - Instancie um banco de dados.
-   - Garanta que o backend Ruby se conecte corretamente ao banco de dados, configurando as variáveis de ambiente necessárias.
+2. **Frontend (Vite + React)**: Um frontend que consome a API do backend. Utiliza o Vite para construção e desenvolvimento em tempo real.
 
-3. **Docker Compose**:
-   - Crie um arquivo \`docker-compose.yml\` que orquestre:
-     - O backend em Ruby.
-     - O frontend da aplicação.
-     - O banco de dados.
-   - Certifique-se de que todos os containers possam se comunicar entre si de maneira eficiente e segura.
+3. **Banco de Dados (PostgreSQL)**: Usado pelo backend para armazenar dados da aplicação, como informações de usuários, pokemons, entre outros.
 
-4. **Acessibilidade**:
-   - A aplicação completa (frontend e backend) deve ser acessível através de um navegador e funcionar corretamente, realizando todas as interações necessárias com o banco de dados.
+A integração entre o frontend e o backend ocorre por meio de requisições HTTP, onde o frontend consome as APIs expostas pelo backend para buscar ou enviar dados.
 
-## Requisitos
+---
 
-- **Docker e Docker Compose**: A aplicação deve rodar em containers Docker sem erros, e o Docker Compose deve orquestrar os serviços.
-- **Banco de Dados**: O banco de dados deve ser configurado e acessado pela aplicação backend sem problemas.
-- **Integração**: A comunicação entre frontend, backend e banco de dados deve ser totalmente funcional.
+## Passo a Passo
 
-## Avaliação
+### 1. Clone os repositórios
 
-Serão avaliados os seguintes aspectos:
+Primeiro, clone o repositório do **frontend** e do **backend** em seu diretório local. Você precisará colocar ambos os repositórios na mesma pasta para que o Docker Compose consiga orquestrar os containers corretamente.
 
-1. **Configuração correta do Docker Compose**: A orquestração dos containers deve ser funcional e bem configurada.
-2. **Integração backend-frontend**: O frontend deve consumir as APIs do backend corretamente.
-3. **Funcionamento do banco de dados**: O backend deve conseguir acessar corretamente o banco de dados.
-4. **Clareza e Organização**: O código e as configurações devem ser claros e bem organizados.
-5. **Otimização**: A eficiência e simplicidade da implementação e da orquestração serão valorizadas.
+```bash
+# Clone o repositório do backend
+git clone https://github.com/seuusuario/devopscaseback.git
 
-## O que entregar
+# Clone o repositório do frontend
+git clone https://github.com/Davimteixeira/devopscasefront.git
+```
 
-- Link para o repositório no GitHub com o Dockerfile, o arquivo \`docker-compose.yml\` e a documentação.
-- Documentação no README.md explicando como rodar os containers localmente, como funciona a integração e como acessar a aplicação completa.
+Você deve colocar os dois repositórios no mesmo diretório, como por exemplo:
 
-## Observações
+/devopscase/
+├── devopscaseback/ # Backend
+└── devopscasefront/ # Frontend
 
-- Utilize apenas serviços gratuitos durante o case.
-- Fique à vontade para otimizar ou melhorar a estrutura da aplicação e o pipeline, caso necessário.
-- Certifique-se de que a aplicação seja acessível a partir de um navegador após a integração.
+2. Gerar a chave RAILS_MASTER_KEY
+   A chave RAILS_MASTER_KEY deve ser gerada antes de rodar os containers. Para gerar a chave, execute o seguinte comando no diretório do backend:
 
-Boa sorte!
+```bash
+rails secret
+```
+
+3. Configuração do Ambiente
+   Crie um arquivo .env no diretório do backend (devopscaseback) com as variáveis de ambiente necessárias. Certifique-se de substituir os valores das variáveis conforme seu ambiente:
+
+bash
+
+# Dentro do diretório devopscaseback, crie o arquivo .env
+
+cd devopscaseback
+
+# No arquivo .env, adicione as variáveis de ambiente
+
+RAILS_MASTER_KEY=<sua-chave-master-gerada>
+POSTGRES_USER=postgres
+POSTGRES_PASS=postgres
+POSTGRES_DB_NAME=pokeapi_development
+DATABASE_HOST=db 4. Subir os Containers
+No diretório onde está o docker-compose.yml, rode o comando abaixo para construir e iniciar os containers:
+
+```bash
+docker-compose up --build
+```
+
+O docker-compose irá construir os containers, instalar as dependências, rodar as migrações do banco de dados e iniciar o servidor Rails para o backend e o servidor Vite para o frontend.
+
+5. Acessar a Aplicação
+   Após o build ser finalizado, você pode acessar:
+
+O backend na URL http://localhost:3000.
+O frontend na URL http://localhost:5173.
+Como Funciona a Integração
+O backend é uma API RESTful construída com Ruby on Rails. Ele utiliza um banco de dados PostgreSQL para armazenar as informações da aplicação.
+O frontend é um projeto Node.js utilizando Vite como bundler. Ele se comunica com o backend para exibir os dados necessários aos usuários.
+O que o Arquivo docker-compose.yml Orquestra
+O arquivo docker-compose.yml orquestra três containers principais:
+
+db: Um container para o banco de dados PostgreSQL.
+
+Imagem: postgres:latest
+Exposta na porta 5432.
+devopscaseback: O container do backend.
+
+Conecta ao banco de dados PostgreSQL.
+Rodará o servidor Rails na porta 3000.
+Executa as migrações automaticamente ao iniciar o container.
+devopscasefront: O container do frontend.
+
+Rodará o servidor Vite na porta 5173.
+Conecta ao backend para fazer requisições à API.
+
+```
+
+```

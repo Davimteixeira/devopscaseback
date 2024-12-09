@@ -36,26 +36,27 @@ git clone https://github.com/seuusuario/devopscaseback.git
 git clone https://github.com/Davimteixeira/devopscasefront.git
 ```
 
-Você deve colocar os dois repositórios no mesmo diretório, como por exemplo:
+## Você deve colocar os dois repositórios no mesmo diretório, como por exemplo:
 
+```bash
 /devopscase/
 ├── devopscaseback/ # Backend
 └── devopscasefront/ # Frontend
+```
 
-2. Gerar a chave RAILS_MASTER_KEY
-   A chave RAILS_MASTER_KEY deve ser gerada antes de rodar os containers. Para gerar a chave, execute o seguinte comando no diretório do backend:
+## 2. Gerar a chave RAILS_MASTER_KEY
+
+A chave `bash RAILS_MASTER_KEY` deve ser gerada antes de rodar os containers. Para gerar a chave, execute o seguinte comando no diretório do backend:
 
 ```bash
 rails secret
 ```
 
-3. Configuração do Ambiente
-   Crie um arquivo .env no diretório do backend (devopscaseback) com as variáveis de ambiente necessárias. Certifique-se de substituir os valores das variáveis conforme seu ambiente:
+## 3. Configuração do Ambiente
 
-bash
+Dentro do diretório devopscaseback, crie o arquivo .env
 
-# Dentro do diretório devopscaseback, crie o arquivo .env
-
+```bash
 cd devopscaseback
 
 # No arquivo .env, adicione as variáveis de ambiente
@@ -66,6 +67,11 @@ POSTGRES_PASS=postgres
 POSTGRES_DB_NAME=pokeapi_development
 DATABASE_HOST=db 4. Subir os Containers
 No diretório onde está o docker-compose.yml, rode o comando abaixo para construir e iniciar os containers:
+```
+
+## 4. Subir os Containers
+
+No diretório onde está o arquivo docker-compose.yml, rode o comando abaixo para construir e iniciar os containers:
 
 ```bash
 docker-compose up --build
@@ -73,9 +79,11 @@ docker-compose up --build
 
 O docker-compose irá construir os containers, instalar as dependências, rodar as migrações do banco de dados e iniciar o servidor Rails para o backend e o servidor Vite para o frontend.
 
-5. Acessar a Aplicação
-   Após o build ser finalizado, você pode acessar:
+## 5. Acessar a Aplicação
 
+Após o build ser finalizado, você pode acessar:
+
+```
 O backend na URL http://localhost:3000.
 O frontend na URL http://localhost:5173.
 Como Funciona a Integração
@@ -97,7 +105,5 @@ devopscasefront: O container do frontend.
 
 Rodará o servidor Vite na porta 5173.
 Conecta ao backend para fazer requisições à API.
-
-```
 
 ```
